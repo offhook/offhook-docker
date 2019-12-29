@@ -1,0 +1,25 @@
+version: "3"
+services:
+  master:
+    image: nginx:1-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "127.0.0.1:8087:80"
+    restart: on-failure
+
+  front-end:
+    image: offhook/front-end
+    restart: on-failure
+
+  coordinator:
+    image: offhook/coordinator
+    volumes:
+      - ./agents_routing.json:/usr/src/app/agents_routing.json:ro
+    restart: on-failure
+    #command: ["ls", "-l", "/usr/src/app/agents_routing.json"]
+
+  agent-yum-centos7:
+    image: offhook/agent-yum-centos7
+    restart: on-failure
+
